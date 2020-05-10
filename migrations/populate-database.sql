@@ -160,41 +160,46 @@ INSERT INTO country (
 );
 
 
-INSERT INTO city (name, country, population, area, founded)
+INSERT INTO city (name, country, population, area, founded, capital)
 VALUES (
   'london',
   (SELECT id FROM country WHERE iso_code = 'gb'),
   8908081,
   1572,
-  50
+  50,
+  true
 ),
 (
   'edinburgh',
   (SELECT id FROM country WHERE iso_code = 'gb'),
   488050,
   264,
-  1130
+  1130,
+  false
 ),
 (
   'new york',
   (SELECT id FROM country WHERE iso_code = 'us'),
   8175133,
   468484,
-  1624
+  1624,
+  false
 ),
 (
   'san diego',
   (SELECT id FROM country WHERE iso_code = 'us'),
   1307402,
   964,
-  1769
+  1769,
+  false
 ),
 (
   'geneva',
   (SELECT id FROM country WHERE iso_code = 'ch'),
   201741,
   15,
-  1851
+  1851,
+  false
 );
 
 

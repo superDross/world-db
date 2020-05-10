@@ -1,5 +1,5 @@
 ALTER TABLE city
-DROP COLUMN capitol;
+DROP COLUMN capital;
 
 ALTER TABLE city
 ALTER COLUMN founded TYPE date USING founded::text::date;

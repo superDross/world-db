@@ -1,5 +1,5 @@
 ALTER TABLE city
-ADD COLUMN capitol boolean;
+ADD COLUMN capital boolean;
 
 /* needs to be converted to text first */
 ALTER TABLE city
