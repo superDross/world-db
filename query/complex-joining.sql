@@ -19,5 +19,3 @@ INNER JOIN currency ON country.currency = currency.id;
  geneva    | switzerland              | chf (fr.)
 (5 rows)
 */
-
-
