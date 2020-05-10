@@ -44,7 +44,7 @@ FROM
 INNER JOIN country ON city.country = country.id;
 
 /*
-   city    |         country          
+   city    |         country
 -----------+--------------------------
  edinburgh | united kingdom
  geneva    | switzerland
@@ -66,13 +66,13 @@ FROM
 LEFT JOIN country ON city.country = country.id;
 
 /*
-   city    |         country          
+   city    |         country
 -----------+--------------------------
  edinburgh | united kingdom
  geneva    | switzerland
  london    | united kingdom
  new york  | united states of america
- paris     | 
+ paris     |
  san diego | united states of america
 */
 
@@ -83,7 +83,7 @@ LEFT JOIN country ON city.country = country.id;
 -- all from the right table only matching in left table
 
 /*
-   city    |         country          
+   city    |         country
 -----------+--------------------------
  edinburgh | united kingdom
  geneva    | switzerland
@@ -107,15 +107,43 @@ FROM
 FULL JOIN country ON city.country = country.id;
 
 /*
-  city    |         country          
+  city    |         country
 -----------+--------------------------
  edinburgh | united kingdom
  geneva    | switzerland
  london    | united kingdom
  new york  | united states of america
- paris     | 
+ paris     |
  san diego | united states of america
            | spain
            | ceylon
            | china
+*/
+
+
+-- CROSS JOIN
+
+-- returns all recorders in right with each entry in left; cartesian product
+
+SELECT
+  country.name AS country, uk_cities.name AS city
+FROM 
+  (SELECT * FROM city WHERE city.country = 1) AS uk_cities
+CROSS JOIN country;
+
+/*
+         country          |   city    
+--------------------------+-----------
+ ceylon                   | edinburgh
+ ceylon                   | london
+ china                    | edinburgh
+ china                    | london
+ spain                    | edinburgh
+ spain                    | london
+ switzerland              | edinburgh
+ switzerland              | london
+ united kingdom           | edinburgh
+ united kingdom           | london
+ united states of america | edinburgh
+ united states of america | london
 */
