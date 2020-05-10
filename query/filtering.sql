@@ -3,7 +3,7 @@
  CITY
 ------
 
-id |   name    | country | population |  area  | capital
+ id |   name    | country | population |  area  | capital
 ----+-----------+---------+------------+--------+---------
   1 | london    |       1 |    8908081 |   1572 | t
   2 | edinburgh |       1 |     488050 |    264 | f
