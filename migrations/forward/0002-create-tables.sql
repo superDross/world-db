@@ -3,8 +3,9 @@
 
 CREATE TABLE currency (
   id serial PRIMARY KEY,
-  name char (3) NOT NULL CHECK (char_length(name) = 3),
-  symbol char (1),
+  name text,
+  code char (3) NOT NULL CHECK (char_length(code) = 3),
+  symbol varchar (5),
   nicknames text [] DEFAULT '{}'
 );
 
@@ -58,6 +59,8 @@ automatically deleted too
 
 */
 CREATE TABLE country_languages (
-  country_id int REFERENCES country(id) ON UPDATE CASCADE ON DELETE CASCADE,
-  languages_id int REFERENCES languages(id) ON UPDATE CASCADE ON DELETE CASCADE
+  country_id int REFERENCES country(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+  languages_id int REFERENCES languages(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+  PRIMARY KEY (country_id, languages_id)
+
 );
