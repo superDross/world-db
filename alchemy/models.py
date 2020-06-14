@@ -124,4 +124,4 @@ class City(Base, CRUD):
     founded = Column("founded", Integer)
 
     def __repr__(self):
-        return f"City(name={self.name.title()}, country={self.country.name.title()}"
+        return f"City(name={self.name.title()})"
