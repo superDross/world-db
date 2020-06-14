@@ -1,4 +1,4 @@
-/*
+"""
 TABLES
 
 - paris has no country
@@ -30,80 +30,39 @@ id |   name    | country | population |  area  | capital
   5 | spain                    |  470007367 |  505990 | right        | es       |        5
   6 | ceylon                   |   12800000 |   65610 | left         | lk       |        6
 
-*/
+"""
+
+from sqlalchemy.sql import func
+
+from models import City, Country
+from utils import get_session
+
+session = get_session()
 
 
--- SUBQUERY
+# SUBQUERY - only get city names whoes rspective country has a population over 100 million
+subquery = session.query(Country.id).filter(Country.population > 100000000).subquery()
+query = session.query(City).filter(City.country_id.in_(subquery))
+print(query.all())
 
--- only get city names whoms respective country has a population over 100 million
-SELECT
-  name
-FROM
-  city
-WHERE
-  country IN (
-    SELECT id FROM country WHERE population > 100000000
-  );
-
-/*
-   name
------------
- san diego
- new york
-*/
-
--- ANY; same as IN
-
-SELECT
-  name
-FROM
-  city
-WHERE
-  country = ANY (
-    SELECT id FROM country WHERE population > 100000000
-  );
-
-/*
-   name
------------
- san diego
- new york
-*/
+# [City(name=San Diego), City(name=New York)]
 
 
--- ALL; find all cities whoms populations are greater than average
+# ALL - all above the average population
+subquery = session.query(func.avg(City.population)).subquery()
+query = session.query(City.name).filter(City.population > subquery)
+print(query.all())
 
-SELECT
-  name
-FROM
-  city
-WHERE
-  population > ALL (
-    SELECT AVG (population) FROM city
-  );
-
-/*   name   
-   ----------
-    london
-    new york
-*/
+# [('london',), ('new york',)]
 
 
--- EXISTS; test for existence of rows in a subquery
+# EXISTS - test for existence with rows
+subquery = (
+    session.query(Country.id)
+    .filter(City.country_id == Country.id)
+    .filter(Country.population > 50000000).subquery()
+)
+query = session.query(City.name).filter(City.country_id.in_(subquery))
+print(query.all())
 
-SELECT
-  name
-FROM
-  city
-WHERE EXISTS (
-  SELECT 1 FROM country WHERE city.country = country.id AND population > 50000000
-);
-
-/* 
-  name    
------------
- london
- san diego
- new york
- edinburgh
-*/
+# [('london',), ('san diego',), ('new york',), ('edinburgh',)]

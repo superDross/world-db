@@ -1,4 +1,6 @@
 """
+SQLAlchemy equivalent - query/filter.sql
+
 ------
  CITY
 ------
@@ -37,7 +39,7 @@ print([(p.name, p.population, p.country.name) for p in pop.all()])
 pop = (
     session.query(City)
     .filter(City.population > 1000000)
-    .filter(City.country != None)  # here
+    .filter(City.country != None)  # HERE
     .order_by(City.population.desc())
     .limit(3)
 )
@@ -87,7 +89,7 @@ print(pop.all())
 # alternatively - use gt/lt operators
 pop = (
     session.query(City.name, City.population)
-    .filter(and_(City.population > 100000, City.population < 1000000))  # here
+    .filter(and_(City.population > 100000, City.population < 1000000))  # HERE
     .order_by(City.population.desc())
 )
 print(pop.all())
