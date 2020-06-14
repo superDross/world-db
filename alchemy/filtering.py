@@ -26,14 +26,19 @@ session = get_session()
 
 
 # FILTER - cities with population over 1 mil, limit to top 3
-
 pop = (
     session.query(City)
     .filter(and_(City.population > 1000000, City.country != None))
     .order_by(City.population.desc())
     .limit(3)
 )
-print([(p.name, p.population, p.country.name) for p in pop.all()])
+actual = [(p.name, p.population, p.country.name) for p in pop.all()]
+expected = [
+    ("london", 8908081, "united kingdom"),
+    ("new york", 8175133, "united states of america"),
+    ("san diego", 1307402, "united states of america"),
+]
+assert actual == expected
 
 # alternatively - multiple filters instead of and
 pop = (
@@ -43,48 +48,38 @@ pop = (
     .order_by(City.population.desc())
     .limit(3)
 )
-print([(p.name, p.population, p.country.name) for p in pop.all()])
-
-# [
-#     ("london", 8908081, "united kingdom"),
-#     ("new york", 8175133, "united states of america"),
-#     ("san diego", 1307402, "united states of america"),
-# ]
+actual = [(p.name, p.population, p.country.name) for p in pop.all()]
+assert actual == expected
 
 
 #  OFFSET - skip the first 2 rows and limit/fetch the first 2 rows
-
-pop = session.query(City).order_by(City.id).offset(2).limit(2)
-print(pop.all())
-
-# [City(name=New York), City(name=San Diego)]
+pop = session.query(City.name).order_by(City.id).offset(2).limit(2)
+assert pop.all() == [("new york",), ("san diego",)]
 
 
 # IN clause
-
 pop = (
     session.query(City.name, City.population)
     .filter(not_(City.name.in_(["paris", "london"])))
     .order_by(City.population.desc())
 )
-print(pop.all())
-
-# [
-#     ("new york", 8175133),
-#     ("san diego", 1307402),
-#     ("edinburgh", 488050),
-#     ("geneva", 201741),
-# ]
+expected = [
+    ("new york", 8175133),
+    ("san diego", 1307402),
+    ("edinburgh", 488050),
+    ("geneva", 201741),
+]
+assert pop.all() == expected
 
 
 # BETWEEN integers
-
 pop = (
     session.query(City.name, City.population)
     .filter(City.population.between(100000, 1000000))
     .order_by(City.population.desc())
 )
-print(pop.all())
+expected = [("edinburgh", 488050), ("geneva", 201741)]
+assert pop.all() == expected
 
 # alternatively - use gt/lt operators
 pop = (
@@ -92,13 +87,10 @@ pop = (
     .filter(and_(City.population > 100000, City.population < 1000000))  # HERE
     .order_by(City.population.desc())
 )
-print(pop.all())
-
-# [('edinburgh', 488050), ('geneva', 201741)]
+assert pop.all() == expected
 
 
 # LIKE/ILIKE
 pop = session.query(City.name).filter(City.name.ilike("%_e%"))
-print(pop.all())
-
-# [("geneva",), ("san diego",), ("new york",)]
+expected = [("geneva",), ("san diego",), ("new york",)]
+assert pop.all() == expected

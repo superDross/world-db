@@ -42,27 +42,25 @@ session = get_session()
 
 # SUBQUERY - only get city names whoes rspective country has a population over 100 million
 subquery = session.query(Country.id).filter(Country.population > 100000000).subquery()
-query = session.query(City).filter(City.country_id.in_(subquery))
-print(query.all())
-
-# [City(name=San Diego), City(name=New York)]
+query = session.query(City.name).filter(City.country_id.in_(subquery))
+expected = [("san diego",), ("new york",)]
+assert query.all() == expected
 
 
 # ALL - all above the average population
 subquery = session.query(func.avg(City.population)).subquery()
 query = session.query(City.name).filter(City.population > subquery)
-print(query.all())
-
-# [('london',), ('new york',)]
+expected = [("london",), ("new york",)]
+assert query.all() == expected
 
 
 # EXISTS - test for existence with rows
 subquery = (
     session.query(Country.id)
     .filter(City.country_id == Country.id)
-    .filter(Country.population > 50000000).subquery()
+    .filter(Country.population > 50000000)
+    .subquery()
 )
 query = session.query(City.name).filter(City.country_id.in_(subquery))
-print(query.all())
-
-# [('london',), ('san diego',), ('new york',), ('edinburgh',)]
+expected = [("london",), ("san diego",), ("new york",), ("edinburgh",)]
+assert query.all() == expected
