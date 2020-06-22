@@ -91,6 +91,6 @@ assert pop.all() == expected
 
 
 # LIKE/ILIKE
-pop = session.query(City.name).filter(City.name.ilike("%_e%"))
+pop = session.query(City.name).filter(City.name.ilike("%_e%")).order_by(City.id.desc())
 expected = [("geneva",), ("san diego",), ("new york",)]
 assert pop.all() == expected

@@ -77,6 +77,26 @@ ORDER BY population DESC;
 */
 
 
+-- ANY
+
+/* can't use IN clause here like above as it does not work with integers */
+
+SELECT
+  name
+FROM
+  city
+WHERE country = ANY('{1, 2}'::int[]);
+
+/*
+  name    
+-----------
+ london
+ edinburgh
+ new york
+ san diego
+*/
+
+
 -- BETWEEN integers
 
 SELECT
