@@ -13,7 +13,6 @@ id |   name    | country | population |  area  | capital
   6 | paris     |         |    2148271 |    105 | t
 */
 
-
 -- DISTINCT entries in a column that is not null
 
 SELECT DISTINCT
@@ -29,4 +28,24 @@ ORDER BY
        1
        2
        4
+*/
+
+-- CASE conditional expression (postgres if/else)
+
+SELECT name,
+  CASE
+    WHEN population >= 1000000 THEN 'large'
+    WHEN population < 1000000 THEN 'small'
+  END AS size
+from city;
+
+/*
+   name    | size  
+-----------+-------
+ paris     | large
+ london    | large
+ geneva    | small
+ san diego | large
+ new york  | large
+ edinburgh | small
 */
