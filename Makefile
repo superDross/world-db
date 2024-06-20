@@ -64,3 +64,7 @@ migrate:
 add-data:
 	psql $(DB) 	-a -f migrations/populate-database.sql
 	psql $(DB) 	-a -f migrations/populate-json-fields.sql
+	psql $(DB) 	-a -f migrations/populate-cities.sql
+
+drop-db:
+	psql $(DB) -c "DROP DATABASE world;"

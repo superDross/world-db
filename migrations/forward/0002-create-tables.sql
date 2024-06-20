@@ -3,7 +3,7 @@
 
 CREATE TABLE currency (
   id serial PRIMARY KEY,
-  name text,
+  name text NOT NULL,
   code char (3) NOT NULL CHECK (char_length(code) = 3),
   symbol varchar (5),
   nicknames text [] DEFAULT '{}'
