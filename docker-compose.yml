@@ -21,6 +21,8 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False" # no login screen
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False" # no password required
     ports:
       - "8080:80"
     volumes:
