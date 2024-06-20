@@ -1,5 +1,7 @@
 .PHONY: up down pull logs
 
+DB=postgresql://postgres:postgres@0.0.0.0:5432/world?sslmode=disable
+
 # create:
 # 	docker run -it -d -p 5432:5432 -e POSTGRES_HOST_AUTH_METHOD=trust --mount source=myvol2,target=/app --name devtest postgres
 
@@ -9,6 +11,7 @@ YELLOW := $(shell tput -Txterm setaf 3)
 WHITE  := $(shell tput -Txterm setaf 7)
 RESET  := $(shell tput -Txterm sgr0)
 
+# TODO: update this file to use similar conventions in the k8s-play repo
 
 TARGET_MAX_CHAR_NUM=20
 ## show help
@@ -34,7 +37,8 @@ pull:
 
 ## spin up containers
 up:
-	docker-compose up -d postgres
+	docker-compose up -d
+	$(MAKE) logs
 
 ## spin down containers
 down:
@@ -42,20 +46,21 @@ down:
 
 ## access containers logs
 logs:
-	docker-compose logs -f postgres
+	docker-compose logs -f
 
 ## log into a psql shell
-psql:
-	PGPASSWORD=postgres psql -h 0.0.0.0 -p 5432 -U postgres $(PSQL_ARGS)
+psql-shell:
+	psql $(DB)
+
 
 ## create all databases and tables
 migrate:
-	PSQL_ARGS="-a -f migrations/forward/0001-create-database.sql" $(MAKE) psql 
-	PSQL_ARGS="-a -f migrations/forward/0002-create-tables.sql" $(MAKE) psql 
-	PSQL_ARGS="-a -f migrations/forward/0003-change-timezone-column-to-array.sql" $(MAKE) psql 
-	PSQL_ARGS="-a -f migrations/forward/0004-alter-city-columns.sql" $(MAKE) psql 
+	psql $(DB) 	-a -f migrations/forward/0001-create-database.sql
+	psql $(DB) 	-a -f migrations/forward/0002-create-tables.sql
+	psql $(DB) 	-a -f migrations/forward/0003-change-timezone-column-to-array.sql
+	psql $(DB) 	-a -f migrations/forward/0004-alter-city-columns.sql
 
 ## add data to the databases
 add-data:
-	PSQL_ARGS="-a -f migrations/populate-database.sql" $(MAKE) psql 
-	PSQL_ARGS="-a -f migrations/populate-json-fields.sql" $(MAKE) psql 
+	psql $(DB) 	-a -f migrations/populate-database.sql
+	psql $(DB) 	-a -f migrations/populate-json-fields.sql
