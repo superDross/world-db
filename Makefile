@@ -40,9 +40,15 @@ up:
 	docker-compose up -d
 	$(MAKE) logs
 
+serve:
+	$(MAKE) up
+
 ## spin down containers
 down:
 	docker-compose down
+
+stop:
+	$(MAKE) down
 
 ## access containers logs
 logs:
