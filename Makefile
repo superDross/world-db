@@ -65,6 +65,7 @@ migrate:
 	psql $(DB) 	-a -f migrations/forward/0002-create-tables.sql
 	psql $(DB) 	-a -f migrations/forward/0003-change-timezone-column-to-array.sql
 	psql $(DB) 	-a -f migrations/forward/0004-alter-city-columns.sql
+	psql $(DB) 	-a -f migrations/forward/0005-large-table.sql
 
 ## add data to the databases
 add-data:
