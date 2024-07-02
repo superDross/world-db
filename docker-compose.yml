@@ -25,6 +25,7 @@ services:
       PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: "False" # no password required
     ports:
       - "8080:80"
+    # make sure to: sudo chmod -R 777 ./_volumes/pgadmin_data
     volumes:
       - ./_volumes/pgadmin_data:/var/lib/pgadmin
       - ./servers.json:/pgadmin4/servers.json # servers configuration
@@ -34,3 +35,7 @@ services:
 volumes:
   postgres_volume:
   pgadmin_data:
+
+networks:
+  world_network:
+    external: true
