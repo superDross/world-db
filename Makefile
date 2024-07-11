@@ -59,6 +59,7 @@ psql-shell:
 	psql $(DB)
 
 
+# TODO: use an actual migration tool
 ## create all databases and tables
 migrate:
 	psql $(DB) 	-a -f migrations/forward/0001-create-database.sql

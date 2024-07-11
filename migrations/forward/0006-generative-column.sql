@@ -1,0 +1,2 @@
+ALTER TABLE city
+ADD COLUMN person_per_km2 INTEGER GENERATED ALWAYS AS (population / area) STORED;
